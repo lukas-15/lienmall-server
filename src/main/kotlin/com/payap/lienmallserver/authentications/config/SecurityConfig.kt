@@ -12,30 +12,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 class SecurityConfig(private val authenticationProvider: AuthenticationProvider) {
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests()
-                .antMatchers("/api/login", "/api/signup").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilterBefore(AuthenticationFilter(authenticationProvider), UsernamePasswordAuthenticationFilter::class.java)
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeHttpRequests()
+            .antMatchers("/api/login", "/api/signup", "/api/token").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .addFilterBefore(
+                AuthenticationFilter(authenticationProvider),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
 
         return http.build()
     }
-
-//    @Bean
-//    fun users(): UserDetailsService? {
-//        val user: UserDetails = User.withDefaultPasswordEncoder()
-//                .username("user1")
-//                .password("password")
-//                .roles("USER")
-//                .build()
-//        return InMemoryUserDetailsManager(user)
-//    }
-
 }

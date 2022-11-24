@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserTokenRepository : JpaRepository<UserTokens, Long> {
-
     fun findByAccessToken_Token(token: String): UserTokens?
 
+    fun findByRefreshToken_Token(token: String): UserTokens?
 }

@@ -1,16 +1,18 @@
 package com.payap.lienmallserver.authentications.services
 
 import com.payap.lienmallserver.authentications.models.UserTokens
-import com.payap.lienmallserver.buyers.exceptions.AlreadyExistExceptions
 import com.payap.lienmallserver.buyers.exceptions.FailIssueNewAuthenticationExceptions
 import com.payap.lienmallserver.buyers.models.Buyers
 import com.payap.lienmallserver.buyers.repositories.BuyerRepository
+import com.payap.lienmallserver.common.exceptions.AlreadyExistExceptions
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class BuyerService(private val buyerRepository: BuyerRepository,
-                   private val userTokenService: UserTokenService) {
+class BuyerService(
+    private val buyerRepository: BuyerRepository,
+    private val userTokenService: UserTokenService
+) {
 
     @Transactional
     fun signup(buyer: Buyers): UserTokens {
@@ -27,7 +29,7 @@ class BuyerService(private val buyerRepository: BuyerRepository,
     fun login(email: String, password: String): UserTokens {
         try {
             val persistedBuyer = buyerRepository.findByEmail(email)
-            if(!persistedBuyer.equalsPassword(password)) {
+            if (!persistedBuyer.equalsPassword(password)) {
                 throw FailIssueNewAuthenticationExceptions("Fail to login")
             }
 

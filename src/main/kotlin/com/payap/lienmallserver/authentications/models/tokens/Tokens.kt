@@ -21,12 +21,17 @@ abstract class Tokens {
     open val token: String = generateToken()
 
     @Column(nullable = false)
-    open val isActivated: Boolean = true
+    open var isActivated: Boolean = true
 
     @Column()
     open val expiredAt: LocalDateTime? = setExpiredAt()
 
     abstract fun setExpiredAt(): LocalDateTime
+
+    fun disable(): Tokens {
+        isActivated = false
+        return this
+    }
 
     fun isValid(): Boolean {
         return isActivated && !isExpired()
@@ -39,7 +44,8 @@ abstract class Tokens {
     private fun generateToken(): String {
         val charset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         return (1..64)
-                .map { charset.random() }
-                .joinToString("")
+            .map { charset.random() }
+            .joinToString("")
     }
+
 }
